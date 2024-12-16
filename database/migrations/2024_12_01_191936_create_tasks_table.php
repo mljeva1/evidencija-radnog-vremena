@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('task_code', 20);
             $table->string('task_name', 255);
             $table->text('task_description')->nullable();
-            $table->integer('work_time')->nullable();
+            $table->decimal('work_time', 4, 2)->nullable();
             $table->foreignId('company_profile_id')->constrained('company_profiles')->onDelete('cascade');
             $table->foreignId('activity_type_id')->constrained('activity_types')->onDelete('cascade');
             $table->foreignId('task_status_id')->constrained('task_statuses')->onDelete('cascade');

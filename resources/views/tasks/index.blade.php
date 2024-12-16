@@ -24,8 +24,18 @@
                 <th>{{ $task->task_code }}</th>
                 <th>{{ $task->task_name }}</th>
                 <th>{{ $task->task_description }}</th>
-                <th>{{ $task->work_time ? ($task->work_time)+'h' : 'N/A' }}</th>
-                <th>{{ $task->companyProfile->company_name }}</th>
+                <th>
+                    @if ($task->work_time)
+                        @if ($task->taskStatus->id == 1)
+                            0 h
+                        @else
+                            {{ $task->work_time }}h
+                        @endif
+                    @else
+                        N/A
+                    @endif  
+                </th>
+                <th>{{ $task->companyProfile->partnership_ended == 0 ? $task->companyProfile->company_name : 'Tvrtka više nije partner' }}</th>
                 <th>{{ $task->activityType->name }} - {{ $task->activityType->description ? $task->activityType->description : 'N/A'}}</th>
                 <th>{{ $task->taskStatus->name }}</th>
             </tr>

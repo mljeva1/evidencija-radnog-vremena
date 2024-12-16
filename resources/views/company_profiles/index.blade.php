@@ -23,7 +23,7 @@
                 <td>{{ $company->description ? $company->description : 'N/A' }}</td>
                 <td>{{ $company->partnership_start_at }}</td>
                 <td>{{ $company->partnership_updated_at ?? 'N/A' }}</td>
-                <td>{{ $company->partnership_ended == 1 ? 'U tijeku' : 'Završeno' }}</td>
+                <td>{{ $company->partnership_ended == 0 ? 'U tijeku' : 'Završeno' }}</td>
             </tr>
             @empty
             <tr>
