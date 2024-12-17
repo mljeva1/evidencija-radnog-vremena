@@ -11,7 +11,7 @@
                 <th>Šifra taska</th>
                 <th>Ime taska</th>
                 <th>Opis taska</th>
-                <th>Radno vrijeme rješavanja</th>
+                <th>Vrijeme rješavanja</th>
                 <th>Kompanija</th>
                 <th>Vrsta aktivnosti</th>
                 <th>Task status</th>

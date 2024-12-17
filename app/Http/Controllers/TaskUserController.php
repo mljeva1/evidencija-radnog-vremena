@@ -6,8 +6,31 @@ use App\Models\Task_user;
 use App\Http\Requests\StoreTask_userRequest;
 use App\Http\Requests\UpdateTask_userRequest;
 
+use App\Models\Task;
+use App\Models\User;
+use Illuminate\Http\Request;
+
 class TaskUserController extends Controller
 {
+    // Dodaj korisnika u task
+    public function addUserToTask($taskId, $userId)
+    {
+        $task = Task::findOrFail($taskId);
+        $task->users()->attach($userId); // Dodavanje korisnika u task
+
+        return back()->with('success', 'Korisnik je uspješno dodan u task.');
+    }
+
+    // Dodaj task korisniku
+    public function addTaskToUser($userId, $taskId)
+    {
+        $user = User::findOrFail($userId);
+        $user->tasks()->attach($taskId); // Dodavanje taska korisniku
+
+        return back()->with('success', 'Task je uspješno dodan korisniku.');
+    }
+
+
     /**
      * Display a listing of the resource.
      */
