@@ -29,3 +29,5 @@ Route::get('/task/{taskId}/add-user/{userId}', [TaskUserController::class, 'addU
 
 // Ruta za dodavanje taska korisniku
 Route::get('/user/{userId}/add-task/{taskId}', [TaskUserController::class, 'addTaskToUser']);
+
+Route::post('/tasks/{task}/assign-users', [TaskController::class, 'assignUsers'])->name('tasks.assign-users');

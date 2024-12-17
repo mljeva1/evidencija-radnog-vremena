@@ -17,6 +17,7 @@ class Task extends Model
 
     protected $table = 'tasks';
 
+
     public function activityType()
     {
         return $this->belongsTo(Activity_type::class, 'activity_type_id'); // Primjer relacije prema ActivityType modelu

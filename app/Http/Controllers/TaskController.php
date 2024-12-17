@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use Illuminate\Http\Request;
+
+use App\Models\User;
 
 class TaskController extends Controller
 {
@@ -13,8 +16,29 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::with(['activityType', 'taskStatus', 'companyProfile',])->get(); // Pretpostavlja se da su relacije definirane
-        return view('tasks.index', ['tasks' => $tasks]);
+        $tasks = Task::with(['activityType', 'taskStatus', 'companyProfile', 'users'])->get();
+        $users = User::all(); // Dohvati sve korisnike
+
+        return view('tasks.index', [
+            'tasks' => $tasks,
+            'users' => $users, // Dodaj sve korisnike u view
+        ]);
+    }
+
+    public function assignUsers(Request $request, $taskId)
+    {
+        $task = Task::findOrFail($taskId);
+
+        // Validacija zahtjeva - da korisnici dolaze kao array
+        $request->validate([
+            'user_ids' => 'nullable|array',
+        'user_ids.*' => 'exists:users,id',
+        ]);
+
+        // Dodaj korisnike na task (sync će obrisati stare i dodati nove)
+        $task->users()->sync($request->input('user_ids', []));
+
+        return redirect()->route('tasks.index')->with('success', 'Korisnici su uspješno ažurirani.');
     }
 
     /**

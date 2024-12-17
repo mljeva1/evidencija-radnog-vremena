@@ -66,4 +66,9 @@ class User extends Authenticatable
         return $this->belongsToMany(Task::class, 'task_user', 'user_id', 'task_id');
     }
 
+    public function isAdmin()
+    {
+        // Pretpostavljamo da postoji polje 'role' koje označava vrstu korisnika
+        return $this->role === 'admin'; // Promijeni prema vlastitoj logici
+    }
 }
