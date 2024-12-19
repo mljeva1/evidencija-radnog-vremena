@@ -26,3 +26,12 @@ use App\Http\Controllers\TaskUserController;
 
 Route::post('/tasks/{task}/assign-user', [TaskController::class, 'assignUser'])->name('tasks.assignUser');
 Route::delete('/tasks/{task}/remove-user/{user}', [TaskController::class, 'removeUser'])->name('tasks.removeUser');
+
+use App\Http\Controllers\AuthController;
+
+// Autentifikacija
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

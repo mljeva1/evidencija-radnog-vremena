@@ -28,6 +28,29 @@
             <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="{{ route('users.index') }}">Korisnici</a>
             </li>
+
+            @auth
+                    <!-- Prikaz za prijavljenog korisnika -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                            @csrf
+                            <button type="submit" class="btn btn-link nav-link" style="text-decoration: none;">Odjava</button>
+                        </form>
+                    </li>
+                @else
+                    <!-- Prikaz za neprijavljenog korisnika -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('login') }}">Prijava</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('register') }}">Registracija</a>
+                    </li>
+                @endauth
+
+
         </ul>
         
         </div>

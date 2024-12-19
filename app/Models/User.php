@@ -10,6 +10,7 @@ use App\Models\Role;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
@@ -26,6 +27,8 @@ class User extends Authenticatable
         'last_name',
         'email',
         'password',
+        'role_id',
+        'section_id'
     ];
 
     /**
@@ -71,5 +74,11 @@ class User extends Authenticatable
     {
         // Pretpostavljamo da postoji polje 'role' koje označava vrstu korisnika
         return $this->role === 'admin'; // Promijeni prema vlastitoj logici
+    }
+
+    // Automatsko hashiranje lozinke
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = Hash::make($value);
     }
 }
