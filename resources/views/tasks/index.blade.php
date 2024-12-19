@@ -38,7 +38,7 @@
                     @if ($task->users->count())
                         <ul>
                             @foreach ($task->users as $user)
-                                <li>{{ $user->name }}</li>
+                                <li>{{ $user->first_name }} {{ $user->last_name }}</li>
                             @endforeach
                         </ul>
                     @else
@@ -61,41 +61,60 @@
                     &#128587;
                     </button>
                 </td>
-            </tr>
+            </tr>          
 
             
-
             <!-- Modal za izmjenu korisnika -->
             <div class="modal fade" id="editUsersModal{{ $task->id }}" tabindex="-1" aria-labelledby="modalLabel{{ $task->id }}" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="modalLabel{{ $task->id }}">Izmjena korisnika za task "{{ $task->task_code }} - {{ $task->task_name }}"</h5>
+                            <h6 class="modal-title" id="modalLabel{{ $task->id }}">Izmjena korisnika za task "{{ $task->task_code }} - {{ $task->task_name }}"</h6>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zatvori"></button>
                         </div>
                         <div class="modal-body">
-                            <form action="{{ route('tasks.assign-users', $task->id) }}" method="POST">
+                            <!-- Forma za dodavanje korisnika -->
+                            <form action="{{ route('tasks.assignUser', $task->id) }}" method="POST">
                                 @csrf
-                                <!-- Lista korisnika osim admina -->
                                 <div class="mb-3">
-                                    <label for="userSelect" class="form-label">Odaberite korisnike:</label>
-                                    <select name="user_ids[]" class="form-control" multiple>
+                                    <label for="userSelect" class="form-label">Dodaj korisnika:</label>
+                                    <select name="user_id" class="form-control">
+                                        <option value="">Odaberi korisnika</option>
                                         @foreach ($users as $user)
-                                            @if (!$user->isAdmin()) <!-- Pretpostavka: metoda isAdmin provjerava ulogu -->
-                                                <option value="{{ $user->id }}" 
-                                                    {{ $task->users->contains($user->id) ? 'selected' : '' }}>
-                                                    {{ $user->name }}
-                                                </option>
+                                            <option value="{{ $user->id }}">
+                                            @if ($user->id != 1)
+                                                {{ $user->first_name }} {{ $user->last_name }}
                                             @endif
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <button type="submit" class="btn btn-success">Spremi</button>
+                                <button type="submit" class="btn btn-success">Dodijeli</button>
                             </form>
+
+                            <!-- Prikaz i uklanjanje dodijeljenih korisnika -->
+                            @if ($task->users->count())
+                                <h6 class="mt-4">Trenutno dodijeljeni korisnici:</h6>
+                                <ul class="list-group">
+                                    @foreach ($task->users as $user)
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            {{ $user->first_name }} {{ $user->last_name }}
+                                            <form action="{{ route('tasks.removeUser', [$task->id, $user->id]) }}" method="POST" style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Jeste li sigurni da želite ukloniti ovog korisnika?')">Ukloni</button>
+                                            </form>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @else
+                                <em class="mt-2"><br><br>Nema trenutno dodijeljenih korisnika.</em>
+                            @endif
                         </div>
                     </div>
                 </div>
-            </div>
+</div>
+
 
 
 
@@ -103,7 +122,7 @@
 
             @empty
             <tr>
-                <td colspan="6" class="text-center">Nema dostupnih kompanija.</td>
+                <td colspan="6" class="text-center">Nema dostupnih taskova.</td>
             </tr>
             @endforelse
         </tbody>

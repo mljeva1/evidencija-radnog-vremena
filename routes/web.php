@@ -24,10 +24,5 @@ Route::resource('activity-type', ActivityTypeController::class);
 
 use App\Http\Controllers\TaskUserController;
 
-// Ruta za dodavanje korisnika u task
-Route::get('/task/{taskId}/add-user/{userId}', [TaskUserController::class, 'addUserToTask']);
-
-// Ruta za dodavanje taska korisniku
-Route::get('/user/{userId}/add-task/{taskId}', [TaskUserController::class, 'addTaskToUser']);
-
-Route::post('/tasks/{task}/assign-users', [TaskController::class, 'assignUsers'])->name('tasks.assign-users');
+Route::post('/tasks/{task}/assign-user', [TaskController::class, 'assignUser'])->name('tasks.assignUser');
+Route::delete('/tasks/{task}/remove-user/{user}', [TaskController::class, 'removeUser'])->name('tasks.removeUser');

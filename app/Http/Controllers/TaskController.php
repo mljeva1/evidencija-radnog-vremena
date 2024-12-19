@@ -25,21 +25,27 @@ class TaskController extends Controller
         ]);
     }
 
-    public function assignUsers(Request $request, $taskId)
-    {
-        $task = Task::findOrFail($taskId);
 
-        // Validacija zahtjeva - da korisnici dolaze kao array
+    public function assignUser(Request $request, Task $task)
+    {
         $request->validate([
-            'user_ids' => 'nullable|array',
-        'user_ids.*' => 'exists:users,id',
+            'user_id' => 'required|exists:users,id',
         ]);
 
-        // Dodaj korisnike na task (sync će obrisati stare i dodati nove)
-        $task->users()->sync($request->input('user_ids', []));
+        // Dodaj korisnika na task (pretpostavljamo da postoji many-to-many relacija)
+        $task->users()->syncWithoutDetaching([$request->user_id]);
 
-        return redirect()->route('tasks.index')->with('success', 'Korisnici su uspješno ažurirani.');
+        return redirect()->back()->with('success', 'Korisnik uspješno dodijeljen tasku.');
     }
+
+    public function removeUser(Task $task, User $user)
+    {
+        // Ukloni korisnika s taska (pretpostavlja many-to-many relaciju)
+        $task->users()->detach($user->id);
+
+        return redirect()->back()->with('success', 'Korisnik uspješno uklonjen s taska.');
+    }
+
 
     /**
      * Show the form for creating a new resource.
