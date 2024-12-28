@@ -1,19 +1,30 @@
-@extends('layouts.app')
+@extends('layouts.auth')
 
 @section('content')
-<div class="container mt-5">
-    <h3 class="text-center">Prijava</h3>
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" name="email" id="email" class="form-control" required>
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div class="card">
+            <div class="card-header">
+                <h4>Login</h4>
+            </div>
+            <div class="card-body">
+                <form action="{{ route('auth.login') }}" method="POST">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" value="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" value="">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+                <div class="mt-3">
+                    <p>Don't have an account? <a href="{{ route('auth.register') }}">Register here</a></p>
+                </div>
+            </div>
         </div>
-        <div class="mb-3">
-            <label for="password" class="form-label">Lozinka</label>
-            <input type="password" name="password" id="password" class="form-control" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Prijava</button>
-    </form>
+    </div>
 </div>
 @endsection

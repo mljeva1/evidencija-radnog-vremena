@@ -13,25 +13,33 @@ use App\Models\Section_room;
 class AuthController extends Controller
 {
     //
-    public function showLoginForm()
+    public function login()
     {
         $roles = Role::all();
         $sections = Section_room::all();
         return view('auth.login', compact('roles', 'sections'));
     }
 
-    public function login(Request $request)
+    public function postLogin(Request $request)
     {
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            return redirect()->intended('/')->with('success', 'Uspješno ste prijavljeni.');
+            // Uspješna prijava, preusmjeravanje na početnu stranicu
+            return redirect()->route('home')->with('success', 'Uspješno ste prijavljeni.');
+        } else {
+            // Neuspješna prijava, vraćanje na login stranicu s porukom o pogrešci
+            return back()->withErrors(['email' => 'Neispravni podaci za prijavu.']);
         }
-
-        return back()->withErrors(['email' => 'Neispravni podaci za prijavu.']);
     }
 
-    public function showRegistrationForm()
+    public function logout()
+    {
+        Auth::logout();
+        return redirect()->route('auth.login');
+    }
+
+    public function register()
     {
         $roles = Role::all(); // Sve role dohvaćene iz baze
         $sections = Section_room::all(); // Sve sekcije dohvaćene iz baze
@@ -39,32 +47,20 @@ class AuthController extends Controller
     }
 
 
-    public function register(Request $request)
+    public function postRegister(Request $request)
     {
-        $request->validate([
+        $data = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'role_id' => 'required|exists:roles,id',
             'section_id' => 'required|exists:section_rooms,id',
         ]);
-
-        User::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role_id' => $request->role_id,
-            'section_id' => $request->section_id,
-        ]);
-
-        return redirect()->route('login')->with('success', 'Uspješno ste registrirani. Prijavite se.');
+        $data['role_id'] = 2;
+        $user = User::create($data);
+        Auth::login($user);
+        return redirect('login')->route('login')->with('success', 'Uspješno ste registrirani. Prijavite se.');
     }
 
-    public function logout()
-    {
-        Auth::logout();
-        return redirect('/')->with('success', 'Uspješno ste odjavljeni.');
-    }
+    
 }

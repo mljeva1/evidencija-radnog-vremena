@@ -35,7 +35,7 @@
                         <a class="nav-link" href="#">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</a>
                     </li>
                     <li class="nav-item">
-                        <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                        <form action="{{ route('auth.logout') }}" method="POST" class="d-inline">
                             @csrf
                             <button type="submit" class="btn btn-link nav-link" style="text-decoration: none;">Odjava</button>
                         </form>
@@ -43,10 +43,10 @@
                 @else
                     <!-- Prikaz za neprijavljenog korisnika -->
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('login') }}">Prijava</a>
+                        <a class="nav-link" href="{{ route('auth.login') }}">Prijava</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('register') }}">Registracija</a>
+                        <a class="nav-link" href="{{ route('auth.register') }}">Registracija</a>
                     </li>
                 @endauth
 
