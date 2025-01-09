@@ -22,10 +22,6 @@
             <input type="password" name="password" id="password" class="form-control" required>
         </div>
         <div class="mb-3">
-            <label for="password_confirmation" class="form-label">Ponovite lozinku</label>
-            <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" required>
-        </div>
-        <div class="mb-3">
             <label for="role_id" class="form-label">Uloga</label>
             <option disabled>User</option>
         </div>

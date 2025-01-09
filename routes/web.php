@@ -16,10 +16,11 @@ use App\Http\Controllers\ActivityTypeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Middleware\Authenticate;
 
-Route::group(['prefix' => 'auth'], function () {
+Route::group(['prefix' => 'auth'], function() {
     Route::get('login', [AuthController::class, 'login'])->name('auth.login');
     Route::post('login', [AuthController::class, 'postLogin'])->name('auth.do_login');
     Route::post('logout', [AuthController::class, 'logout'])->name('auth.logout');
+    
     Route::get('register', [AuthController::class, 'register'])->name('auth.register');
     Route::post('register', [AuthController::class, 'postRegister'])->name('auth.do_register');
 });
@@ -31,8 +32,7 @@ Route::group(['middleware' => Authenticate::class], function (){
     Route::resource('section-rooms', SectionRoomController::class);
     Route::resource('task-status', TaskStatusController::class);
     Route::resource('tasks', TaskController::class);
-    Route::resource('activity-type', ActivityTypeController::class);                
-
+    Route::resource('activity-type', ActivityTypeController::class);               
 });
 
 Route::post('/tasks/{task}/assign-user', [TaskController::class, 'assignUser'])->name('tasks.assignUser');
