@@ -28,7 +28,6 @@
             <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="{{ route('users.index') }}">Korisnici</a>
             </li>
-
             @auth
                     <!-- Prikaz za prijavljenog korisnika -->
                     <li class="nav-item">
@@ -52,7 +51,12 @@
 
 
         </ul>
-        
+        @if(Auth::check())
+                <h1>Dobrodošli, {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}!</h1>
+            @else
+                <h1>Molimo prijavite se.</h1>
+            @endif
+    
         </div>
 
     </div>

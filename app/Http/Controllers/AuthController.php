@@ -18,15 +18,30 @@ class AuthController extends Controller
 
     public function postLogin(Request $request)
     {
-         $credentials = $request->only('email','password');
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
 
-         if(Auth::attempt($credentials)) {
-            return redirect()->route('home');
-         }
+        $credentials = $request->only('email', 'password');
 
-         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-         ]);
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            return redirect()->intended('dashboard')->with('success', 'Uspješno ste prijavljeni.');
+        }
+    
+        return back()->withErrors([
+            'email' => 'Neispravni podaci za prijavu.',
+        ]);
+    }
+    
+    public function dashboard()
+    {
+        if (Auth::check()) {
+            $user = Auth::user();
+            return view('home', compact('user'));
+        }
+        return redirect("login")->with('error', 'Nemate pristup.');
     }
 
     public function logout()
