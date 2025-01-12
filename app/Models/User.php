@@ -70,10 +70,10 @@ class User extends Authenticatable
     }
 
 
-    public function isAdmin()
+    public function isAdmin(): bool
     {
         // Pretpostavljamo da postoji polje 'role' koje označava vrstu korisnika
-        return $this->role === 'admin'; // Promijeni prema vlastitoj logici
+        return $this->role_id === 1;
     }
 
     // Automatsko hashiranje lozinke
