@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Models\Role;
 use App\Models\Section_room;
 
+use Illuminate\Support\Facades\Log; // Ovdje dodajemo Log
+
 class AuthController extends Controller
 {
     //
@@ -19,21 +21,27 @@ class AuthController extends Controller
     public function postLogin(Request $request)
     {
         $credentials = $request->only('email', 'password');
+    
+        // Dodaj logiranje
+        Log::info('Login attempt', $credentials);
 
         if (Auth::attempt($credentials)) {
             return redirect()->route('home');
         }
 
+        // Logiranje ako login nije uspio
+        Log::error('Login failed for email: ' . $request->email);
+
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
-        ]);
+    ]);
     }
     
     public function dashboard()
     {
         if (Auth::check()) {
             $user = Auth::user();
-            return view('home', compact('user'));
+            return view('home.index', compact('user'));
         }
         return redirect("login")->with('error', 'Nemate pristup.');
     }
@@ -55,8 +63,8 @@ class AuthController extends Controller
     public function postRegister(Request $request)
     {
         $data = $request->validate([
-            'first_name' => 'requiredstring|max:255',
-            'last_name' => 'requiredstring|max:255',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
             'section_room_id' => 'required|exists:section_room_id',

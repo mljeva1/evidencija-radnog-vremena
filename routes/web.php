@@ -2,6 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 
+/* 
+use Illuminate\Support\Facades\Hash;
+
+dd(Hash::make('lozinka'));
+*/
+
 Route::get('/', function () {
     return view('home.index');
 })->name('home');
